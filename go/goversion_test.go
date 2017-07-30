@@ -11,12 +11,6 @@ func Benchmark_processFile(b *testing.B) {
 	if err != nil {
 		b.Fatal(err)
 	}
-
-	// data, err := ioutil.ReadAll(file)
-	// if err != nil {
-	// 	b.Fatal(err)
-	// }
-
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		k, v := processFile(file)

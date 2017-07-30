@@ -23,6 +23,7 @@ func processLine(b []byte) (int, int) {
 }
 
 func processFile(file *os.File) (int, int) {
+	file.Seek(0, 0)
 	var sumByKey [2009]int
 
 	scanner := bufio.NewScanner(file)
