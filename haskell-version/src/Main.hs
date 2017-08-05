@@ -9,10 +9,9 @@ toInt :: C8.ByteString -> Int
 toInt = readDecimal_
 
 processFile = do
-  bsLines <- C8.lines <$> C8.readFile "../ngrams.tsv"
-  let info = C8.splitWith (=='\t') <$> bsLines :: [[C8.ByteString]]
+  info <- fmap C8.words . C8.lines <$> C8.readFile "../ngrams.tsv"
   let m = foldl'
-             (\acc x -> let (_:key:val:_) = (x :: [C8.ByteString]) in M.insertWith (\new old -> old + new) (toInt key) (toInt val) acc)
+             (\acc x -> let (_:key:val:_) = x in M.insertWith (\new old -> old + new) (toInt key) (toInt val) acc)
              M.empty
              info
   pure $ last $ sortOn snd (M.toList m)
