@@ -45,5 +45,14 @@ func processFile(file *os.File) (int, int) {
 }
 
 func main() {
-	fmt.Println("hello")
+	file, err := os.Open("../ngrams.tsv")
+	defer file.Close()
+	if err != nil {
+		fmt.Println(err)
+	}
+	k, v := processFile(file)
+	if k != 2006 || v != 22569013 {
+		fmt.Println("bad result")
+		// b.Fatalf(`bad result %v | %v`, k, v)
+	}
 }
