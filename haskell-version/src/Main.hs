@@ -1,22 +1,16 @@
 module Main where
 
 import qualified Data.ByteString.Char8 as C8
-import qualified Data.IntMap.Strict as M
-import Data.List
 import Data.ByteString.Lex.Integral
+import qualified Data.Vector.Unboxed as V
 
 toInt :: C8.ByteString -> Int
 toInt = readDecimal_
 
-processFile = do
-  info <- fmap C8.words . C8.lines <$> C8.readFile "../ngrams.tsv"
-  let m = foldl'
-             (\acc x -> let (_:key:val:_) = x in M.insertWith (\new old -> old + new) (toInt key) (toInt val) acc)
-             M.empty
-             info
-  pure $ last $ sortOn snd (M.toList m)
+process bs = (i, xs V.! i) where
+  info = C8.splitWith (=='\t') <$> C8.lines bs
+  xs = V.unsafeAccumulate (+) (V.replicate 2009 0) . V.fromList
+     $ map (\(_:key:val:_) -> (toInt key, toInt val)) info
+  i = V.maxIndex xs
 
-main :: IO ()
-main = do
-  x <- processFile
-  print x
+main = print . process =<< C8.readFile "../ngrams.tsv"
