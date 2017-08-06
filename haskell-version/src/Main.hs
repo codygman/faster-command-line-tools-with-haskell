@@ -12,7 +12,7 @@ import Data.Word (Word8)
 import qualified Data.ByteString as B
 
 isSpaceWord8 :: Word8 -> Bool
-isSpaceWord8 !w = w == 0x09 -- \t
+isSpaceWord8 w = w == 0x09 -- \t
 {-# INLINE isSpaceWord8 #-}
 
 mywords :: BS.ByteString -> [BS.ByteString]
