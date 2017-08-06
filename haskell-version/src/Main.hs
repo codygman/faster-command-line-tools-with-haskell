@@ -7,6 +7,7 @@ import qualified Data.Vector.Unboxed as V
 toInt :: C8.ByteString -> Int
 toInt = readDecimal_
 
+{-# INLINE process #-}
 process bs = (i, xs V.! i) where
   info = C8.splitWith (=='\t') <$> C8.lines bs
   xs = V.unsafeAccumulate (+) (V.replicate 2009 0) . V.fromList
