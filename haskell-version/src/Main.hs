@@ -27,7 +27,7 @@ processFile content = do
         keyInt = readDecimal_ k
         valInt = readDecimal_ v
     VGM.unsafeModify vec (+ valInt) keyInt
-  return vec
+  return $! vec
 {-# INLINE processFile #-}
 
 main :: IO ()
