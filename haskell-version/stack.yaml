@@ -2,7 +2,7 @@ flags: {}
 extra-package-dbs: []
 apply-ghc-options: everything
 ghc-options:
-  ! '*': -O2
+  ! '*': -O3
 packages:
 - '.'
 setup-info:
