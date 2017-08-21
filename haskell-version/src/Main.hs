@@ -6,7 +6,6 @@ import qualified Data.Vector.Generic.Mutable as VGM
 import qualified Data.Vector.Unboxed.Mutable as VM
 import qualified Data.ByteString.Char8 as BS
 import Data.ByteString.Lex.Integral
-import Control.Monad.Primitive
 import Control.Monad (forM_)
 import Data.Word (Word8)
 import qualified Data.ByteString as B
@@ -19,7 +18,7 @@ mywords :: BS.ByteString -> [BS.ByteString]
 mywords bs = B.splitWith isSpaceWord8 bs
 {-# INLINE mywords #-}
 
-processFile :: BS.ByteString -> IO (VM.MVector RealWorld Int)
+processFile :: BS.ByteString -> IO (VM.IOVector Int)
 processFile content = do
   vec <- VGM.new 2009
   forM_ (mywords <$> BS.lines content) $ \line -> do
