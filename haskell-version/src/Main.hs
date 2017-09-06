@@ -2,30 +2,21 @@
 module Main where
 
 import qualified Data.Vector.Unboxed as VU
-import qualified Data.Vector.Generic.Mutable as VGM
 import qualified Data.Vector.Unboxed.Mutable as VM
 import qualified Data.ByteString.Char8 as BS
 import Data.ByteString.Lex.Integral
 import Control.Monad (forM_)
-import Data.Word (Word8)
-import qualified Data.ByteString as B
-
-isSpaceWord8 :: Word8 -> Bool
-isSpaceWord8 w = w == 0x09 -- \t
-{-# INLINE isSpaceWord8 #-}
-
-mywords :: BS.ByteString -> [BS.ByteString]
-mywords bs = B.splitWith isSpaceWord8 bs
-{-# INLINE mywords #-}
 
 processFile :: BS.ByteString -> IO (VM.IOVector Int)
 processFile content = do
-  vec <- VGM.new 2009
-  forM_ (mywords <$> BS.lines content) $ \line -> do
-    let (_ : k : v : _) = line
-        keyInt = readDecimal_ k
-        valInt = readDecimal_ v
-    VGM.unsafeModify vec (+ valInt) keyInt
+  vec <- VM.new 2009
+  forM_ (BS.lines content) $ \line -> do
+    let line' = BS.drop 1 $ BS.dropWhile (/= '\t') line
+    let (k, line'') = BS.break (== '\t') line'
+    let (v, _ ) = BS.break (== '\t') $ BS.drop 1 line''
+    let keyInt = readDecimal_ k
+    let valInt = readDecimal_ v
+    VM.unsafeModify vec (+ valInt) keyInt
   return $! vec
 {-# INLINE processFile #-}
 
